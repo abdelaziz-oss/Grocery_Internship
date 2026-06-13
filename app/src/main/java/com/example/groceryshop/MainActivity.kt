@@ -7,10 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.groceryshop.authentication.login_screen.LoginScreen
-import com.example.groceryshop.authentication.signup_screen.SignUpScreen
+import com.example.groceryshop.authentication.presentation.login_screen.components.LoginScreen
+import com.example.groceryshop.authentication.presentation.signup_screen.components.SignUpScreen
 import com.example.groceryshop.home_screen.HomeScreen
-
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,10 +31,14 @@ fun AppNavigation() {
         startDestination = "login"
     ) {
         composable("login") {
-            LoginScreen(navController = navController)
+            LoginScreen(onLoginSuccess = {
+                navController.navigate("home")
+            }, onSignUp = { navController.navigate("signup") })
         }
         composable("signup") {
-            SignUpScreen(navController = navController)
+            SignUpScreen(
+                onSignUpSuccess = { navController.navigate("login") },
+                alreadyHaveAnAccount = { navController.navigate("login") })
         }
         composable("home") {
             HomeScreen()

@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.signup_screen
+package com.example.groceryshop.authentication.presentation.signup_screen.components
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -34,14 +34,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.groceryshop.authentication.login_screen.viewmodel.LoginViewModel
-import com.example.groceryshop.authentication.signup_screen.viewmodel.SignUpState
-import com.example.groceryshop.authentication.signup_screen.viewmodel.SignUpViewModel
+import com.example.groceryshop.authentication.presentation.signup_screen.viewmodel.SignUpState
+import com.example.groceryshop.authentication.presentation.signup_screen.viewmodel.SignUpViewModel
 
 @Composable
-fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel = viewModel(),) {
+fun SignUpScreen(
+    viewModel: SignUpViewModel = hiltViewModel(),
+    onSignUpSuccess: () -> Unit,
+    alreadyHaveAnAccount: () -> Unit
+) {
     val signUpState by viewModel.signUpState.collectAsState()
     val fullNameText = remember { mutableStateOf("") }
     val emailText = remember { mutableStateOf("") }
@@ -55,7 +58,7 @@ fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel = viewM
         when (signUpState) {
             is SignUpState.Success -> {
                 Toast.makeText(context, "User Created", Toast.LENGTH_SHORT).show()
-                navController.navigate("login")
+                onSignUpSuccess
 
 
             }
@@ -135,7 +138,7 @@ fun SignUpScreen(navController: NavController,viewModel: SignUpViewModel = viewM
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text("Already have an account?", fontSize = 14.sp, color = Color(0xFF888780))
-                TextButton(onClick = {navController.navigate("login")}, contentPadding = PaddingValues(0.dp)) {
+                TextButton(onClick = alreadyHaveAnAccount, contentPadding = PaddingValues(0.dp)) {
                     Text(
                         "SignIn",
                         color = Color.White,

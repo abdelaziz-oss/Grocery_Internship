@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.login_screen
+package com.example.groceryshop.authentication.presentation.login_screen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -20,13 +20,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.groceryshop.authentication.login_screen.viewmodel.LoginViewModel
+import com.example.groceryshop.authentication.presentation.login_screen.viewmodel.LoginViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 
 @Composable
-fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewModel()) {
+fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+    onLoginSuccess: () -> Unit,
+    onSignUp: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -70,13 +75,8 @@ fun LoginScreen(navController: NavController, viewModel: LoginViewModel = viewMo
             Spacer(modifier = Modifier.height(30.dp))
             LoginCard(
                 viewModel = viewModel,
-                onLoginSuccess = {
-                    navController.navigate("home") {
-                        //popUpTo("login") { inclusive = true }
-                    }
-                },{
-                    navController.navigate("signup")
-                }
+                onLoginSuccess = onLoginSuccess, onSignUp = onSignUp
+
             )
         }
 

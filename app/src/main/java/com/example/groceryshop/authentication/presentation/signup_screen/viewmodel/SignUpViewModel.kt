@@ -1,21 +1,22 @@
-package com.example.groceryshop.authentication.signup_screen.viewmodel
+package com.example.groceryshop.authentication.presentation.signup_screen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.groceryshop.authentication.login_screen.repository.AuthRepository
-import com.example.groceryshop.authentication.signup_screen.models.SignUpResponse
+import com.example.groceryshop.authentication.domain.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-
-class SignUpViewModel : ViewModel() {
-    val repository = AuthRepository()
+import javax.inject.Inject
+@HiltViewModel
+class SignUpViewModel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
+    //val repository = AuthRepositoryImpl()
     private val _signUpState = MutableStateFlow<SignUpState>(SignUpState.Idle)
     val signUpState: StateFlow<SignUpState> = _signUpState
     fun signUp(email: String, username: String, password: String) {
         viewModelScope.launch {
             _signUpState.value = SignUpState.Loading
-            val result = repository.SignUp(email, username, password)
+            val result = repository.signUp(email, username, password)
             _signUpState.value = if (result.isSuccess) {
                 SignUpState.Success
             } else {

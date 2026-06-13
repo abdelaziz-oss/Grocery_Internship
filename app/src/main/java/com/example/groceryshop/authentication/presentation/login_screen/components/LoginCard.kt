@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.login_screen
+package com.example.groceryshop.authentication.presentation.login_screen.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -39,13 +39,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.groceryshop.authentication.login_screen.viewmodel.LoginState
-import com.example.groceryshop.authentication.login_screen.viewmodel.LoginViewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.groceryshop.authentication.presentation.login_screen.viewmodel.LoginState
+import com.example.groceryshop.authentication.presentation.login_screen.viewmodel.LoginViewModel
 
 @Composable
 fun LoginCard(
-    viewModel: LoginViewModel = viewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
     onLoginSuccess: () -> Unit,
     onSignUp: () -> Unit
 ) {

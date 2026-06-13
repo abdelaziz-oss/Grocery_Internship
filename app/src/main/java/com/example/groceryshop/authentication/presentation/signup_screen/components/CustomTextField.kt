@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.signup_screen
+package com.example.groceryshop.authentication.presentation.signup_screen.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape

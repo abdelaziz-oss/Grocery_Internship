@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.splash_screen
+package com.example.groceryshop.authentication.presentation.splash_screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.login_screen.models
+package com.example.groceryshop.authentication.data.models
 
 data class LoginRequest(val email: String, val password: String)
 data class LoginResponse(

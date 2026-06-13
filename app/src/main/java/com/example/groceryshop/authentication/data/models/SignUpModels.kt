@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.signup_screen.models
+package com.example.groceryshop.authentication.data.models
 
 data class SignUpRequest(
     val email: String,
