@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.presentation.signup_screen.components
+package com.example.groceryshop.authentication.ui.signup_screen.components
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -18,6 +18,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -35,9 +37,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.groceryshop.authentication.presentation.signup_screen.viewmodel.SignUpState
-import com.example.groceryshop.authentication.presentation.signup_screen.viewmodel.SignUpViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.groceryshop.authentication.ui.signup_screen.viewmodel.SignUpState
+import com.example.groceryshop.authentication.ui.signup_screen.viewmodel.SignUpViewModel
+import com.example.groceryshop.authentication.ui.signup_screen.viewmodel.SignupEvents
 
 @Composable
 fun SignUpScreen(
@@ -45,28 +50,26 @@ fun SignUpScreen(
     onSignUpSuccess: () -> Unit,
     alreadyHaveAnAccount: () -> Unit
 ) {
-    val signUpState by viewModel.signUpState.collectAsState()
-    val fullNameText = remember { mutableStateOf("") }
-    val emailText = remember { mutableStateOf("") }
-    // val phoneText = remember { mutableStateOf("") }
-    val passwordText = remember { mutableStateOf("") }
-    val context = LocalContext.current
+    val state by viewModel.signUpState.collectAsState()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val snackBarHostState = remember { SnackbarHostState() }
+//    val signUpState by viewModel.signUpState.collectAsState()
+//    val fullNameText = remember { mutableStateOf("") }
+//    val emailText = remember { mutableStateOf("") }
+//    // val phoneText = remember { mutableStateOf("") }
+//    val passwordText = remember { mutableStateOf("") }
+//    val context = LocalContext.current
 
     //  val confirmPasswordText = remember { mutableStateOf("") }
 
-    LaunchedEffect(signUpState) {
-        when (signUpState) {
-            is SignUpState.Success -> {
-                Toast.makeText(context, "User Created", Toast.LENGTH_SHORT).show()
-                onSignUpSuccess
-
-
+    LaunchedEffect(viewModel.events, lifecycleOwner) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.events.collect { event ->
+                when (event) {
+                    is SignupEvents.OnSignUpSuccess -> onSignUpSuccess()
+                    is SignupEvents.ApiError -> snackBarHostState.showSnackbar(event.message)
+                }
             }
-
-            is SignUpState.Error -> {
-            }
-
-            else -> {}
         }
     }
 
@@ -102,16 +105,28 @@ fun SignUpScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             SignUpItem(text = "Full Name") {
-                CustomTextField(input = fullNameText) { fullNameText.value = it }
+                CustomTextField(
+                    input = state.userName,
+                    errorMessage = state.userNameError,
+                    onValueChange = viewModel::onUsernameChange
+                )
             }
             SignUpItem(text = "Email") {
-                CustomTextField(input = emailText) { emailText.value = it }
+                CustomTextField(
+                    input = state.email,
+                    errorMessage = state.emailError,
+                    onValueChange = viewModel::onEmailChange
+                )
             }
 //            SignUpItem(text = "Phone Number") {
 //                CustomTextField(input = phoneText) { fullNameText.value = it }
 //            }
             SignUpItem(text = "Password") {
-                CustomTextField(input = passwordText) { passwordText.value = it }
+                CustomTextField(
+                    input = state.password,
+                    errorMessage = state.passwordError,
+                    onValueChange = viewModel::onPasswordChange
+                )
             }
 //            SignUpItem(text = "Confirm password") {
 //                CustomTextField(input = confirmPasswordText) { fullNameText.value = it }
@@ -119,7 +134,7 @@ fun SignUpScreen(
             Box(modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)) {
                 OutlinedButton(
                     onClick = {
-                        viewModel.signUp(emailText.value, fullNameText.value, passwordText.value)
+                        viewModel.signUpClick()
 
                     },
                     shape = RoundedCornerShape(14.dp),
@@ -147,6 +162,10 @@ fun SignUpScreen(
                 }
             }
         }
+        SnackbarHost(
+            hostState = snackBarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
 
 
     }

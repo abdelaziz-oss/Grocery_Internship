@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.presentation.login_screen.components
+package com.example.groceryshop.authentication.ui.login_screen.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AlternateEmail
+import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -18,26 +18,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EmailTextField(email: MutableState<String>, onValueChange: (String) -> Unit) {
-
+fun PasswordTextField(
+    password: String,
+    passwordError: String? = null,
+    onValueChanged: (String) -> Unit
+) {
     Column(modifier = Modifier) {
-        Text("Email", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+        Text("Password", fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
         Spacer(modifier = Modifier.height(5.dp))
         TextField(
-            value = email.value,
-            onValueChange = onValueChange,
+            value = password,
+            onValueChange = onValueChanged,
+            isError = passwordError != null,
+            supportingText = { if (passwordError != null) Text(passwordError, color = Color.Red) },
             leadingIcon = {
                 Icon(
-                    Icons.Filled.AlternateEmail,
+                    Icons.Filled.Password,
                     contentDescription = null,
                     tint = Color(0xFF1D9E75),
                 )
             },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             singleLine = true,
             shape = RoundedCornerShape(12.dp),
             colors = TextFieldDefaults.colors(  // ← change to TextFieldDefaults
@@ -51,25 +58,5 @@ fun EmailTextField(email: MutableState<String>, onValueChange: (String) -> Unit)
             ),
             modifier = Modifier.fillMaxWidth(.9f)
         )
-
     }
-//    OutlinedTextField(
-//        value = email.value,
-//        onValueChange = { email.value = it },
-//        label = { Text("Email") },
-//        leadingIcon = {
-//            Icon(Icons.Filled.Email, contentDescription = null, tint = Color(0xFF1D9E75))
-//        },
-//        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-//        singleLine = true,
-//        shape = RoundedCornerShape(12.dp),
-//        colors = OutlinedTextFieldDefaults.colors(
-//            focusedBorderColor   = Color(0xFF1D9E75),
-//            unfocusedBorderColor = Color(0xFFC8E6D8),
-//            focusedLabelColor    = Color(0xFF1D9E75),
-//            unfocusedContainerColor = Color.White,
-//            focusedContainerColor   = Color.White
-//        ),
-//        modifier = Modifier.fillMaxWidth()
-//    )
 }

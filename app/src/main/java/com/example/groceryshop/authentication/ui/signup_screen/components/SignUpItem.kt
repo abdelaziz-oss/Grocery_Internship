@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.presentation.signup_screen.components
+package com.example.groceryshop.authentication.ui.signup_screen.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

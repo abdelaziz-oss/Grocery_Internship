@@ -1,4 +1,4 @@
-package com.example.groceryshop.authentication.presentation.login_screen.components
+package com.example.groceryshop.authentication.ui.login_screen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,8 +11,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,9 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.groceryshop.authentication.presentation.login_screen.viewmodel.LoginViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.groceryshop.authentication.ui.login_screen.viewmodel.LoginViewModel
 
 
 @Composable
@@ -32,6 +33,7 @@ fun LoginScreen(
     onLoginSuccess: () -> Unit,
     onSignUp: () -> Unit
 ) {
+    val snackBarHostState = remember { SnackbarHostState() }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -74,11 +76,16 @@ fun LoginScreen(
             )
             Spacer(modifier = Modifier.height(30.dp))
             LoginCard(
+                snackBarHostState = snackBarHostState,
                 viewModel = viewModel,
-                onLoginSuccess = onLoginSuccess, onSignUp = onSignUp
+                onLoginSuccess = onLoginSuccess, onSignUp = onSignUp,
 
-            )
+                )
         }
+        SnackbarHost(
+            hostState = snackBarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
 
     }
 }
