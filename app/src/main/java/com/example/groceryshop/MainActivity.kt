@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.groceryshop.authentication.ui.login_screen.components.LoginScreen
 import com.example.groceryshop.authentication.ui.signup_screen.components.SignUpScreen
+import com.example.groceryshop.authentication.ui.splash_screen.components.SplashScreen
 import com.example.groceryshop.home_screen.HomeScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,8 +29,17 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "splash"
     ) {
+        composable("splash") {
+            SplashScreen(
+                onDecision =
+                    { route ->
+                        navController.navigate(route) {
+                            popUpTo("splash") { inclusive = true }
+                        }
+                    })
+        }
         composable("login") {
             LoginScreen(onLoginSuccess = {
                 navController.navigate("home")

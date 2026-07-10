@@ -2,6 +2,7 @@ package com.example.groceryshop.authentication.ui.login_screen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.groceryshop.authentication.data.local.UserPreferences
 import com.example.groceryshop.authentication.domain.AuthRepository
 import com.example.groceryshop.authentication.domain.validation.EmailValidator
 import com.example.groceryshop.authentication.domain.validation.PasswordValidator
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val repository: AuthRepository,
     private val emailValidator: EmailValidator,
-    private val passwordValidator: PasswordValidator
+    private val passwordValidator: PasswordValidator,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
     // private val repository = AuthRepositoryImpl()
     private val _loginState = MutableStateFlow(LoginUiState())
@@ -56,9 +58,8 @@ class LoginViewModel @Inject constructor(
             }
             try {
                 val result = repository.login(current.email, current.password)
-
-
                 if (result.isSuccess) {
+                    userPreferences.setLoggedIn(true)
                     _events.emit(LoginEvents.NavigationOnSuccess)
                     //    it.copy(isLoading = false, isLoginSuccess = true)
                 } else {

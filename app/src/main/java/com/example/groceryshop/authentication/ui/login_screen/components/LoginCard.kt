@@ -57,9 +57,6 @@ fun LoginCard(
     val state by viewModel.loginState.collectAsState()
 
     val lifecycleOwner = LocalLifecycleOwner.current
-//    val email = remember { mutableStateOf("") }
-//    val password = remember { mutableStateOf("") }
-//    val loginState by viewModel.loginState.collectAsState()
 
     LaunchedEffect(viewModel.events, lifecycleOwner) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -69,24 +66,7 @@ fun LoginCard(
                     is LoginEvents.ApiError -> snackBarHostState.showSnackbar(event.message)
                 }
             }
-
         }
-        // if (state.isLoginSuccess) {
-        //    onLoginSuccess()
-        // }
-//        when (state) {
-//          if (state.isLoginSuccess) {
-//            onLoginSuccess()
-//        }
-////        when (state) {
-////            is state. -> onLoginSuccess()
-////            is state.Error -> {}
-////            else -> {}
-////        }
-//    }  is state. -> onLoginSuccess()
-//            is state.Error -> {}
-//            else -> {}
-//        }
     }
 
     Box(
@@ -94,6 +74,7 @@ fun LoginCard(
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
     ) {
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,26 +83,40 @@ fun LoginCard(
             colors = CardDefaults.cardColors(containerColor = Color(0xFFF4FAF7)),
             elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 36.dp, start = 8.dp, end = 8.dp, bottom = 16.dp),
+                    .padding(
+                        top = 36.dp,
+                        start = 8.dp,
+                        end = 8.dp,
+                        bottom = 16.dp
+                    ),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+
                 Text(
-                    "FreshBasket",
+                    text = "FreshBasket",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF085041)
                 )
+
                 Spacer(modifier = Modifier.height(2.dp))
+
                 Text(
-                    "Fresh groceries, delivered to you",
+                    text = "Fresh groceries, delivered to you",
                     fontSize = 12.sp,
                     color = Color(0xFF5F5E5A)
                 )
 
-                EmailTextField(state.email, state.emailError, viewModel::onEmailChange)
+                EmailTextField(
+                    state.email,
+                    state.emailError,
+                    viewModel::onEmailChange
+                )
+
                 PasswordTextField(
                     state.password,
                     state.passwordError,
@@ -132,7 +127,11 @@ fun LoginCard(
                     onClick = {},
                     modifier = Modifier.align(Alignment.End)
                 ) {
-                    Text("Forget Password?", color = Color(0xFF1D9E75), fontSize = 11.sp)
+                    Text(
+                        "Forget Password?",
+                        color = Color(0xFF1D9E75),
+                        fontSize = 11.sp
+                    )
                 }
 
                 Button(
@@ -142,32 +141,41 @@ fun LoginCard(
                         .padding(horizontal = 8.dp)
                         .height(50.dp),
                     shape = RoundedCornerShape(14.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1D9E75))
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF1D9E75)
+                    )
                 ) {
+
                     if (state.isLoading) {
                         CircularProgressIndicator(
-                            color = Color.White,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(24.dp),
+                            color = Color.White
                         )
                     } else {
                         Text("Login")
                     }
                 }
-                //state.loginErrorMessage?.let { msg ->
-                //    Text(msg, color = Color.Red, fontSize = 12.sp)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
                 HorizontalDivider(
                     modifier = Modifier
                         .weight(1f)
                         .padding(horizontal = 8.dp),
                     color = Color(0xFFC8E6D8)
                 )
-                Text("  or  ", fontSize = 11.sp, color = Color(0xFFB4B2A9))
+
+                Text(
+                    " or ",
+                    fontSize = 11.sp,
+                    color = Color(0xFFB4B2A9)
+                )
+
                 HorizontalDivider(
                     modifier = Modifier
                         .weight(1f)
@@ -179,7 +187,7 @@ fun LoginCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             OutlinedButton(
-                onClick = { },
+                onClick = {},
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
@@ -189,16 +197,33 @@ fun LoginCard(
                     containerColor = Color.White,
                     contentColor = Color(0xFF444441)
                 ),
-                border = BorderStroke(1.dp, Color(0xFFC8E6D8))
+                border = BorderStroke(
+                    1.dp,
+                    Color(0xFFC8E6D8)
+                )
             ) {
-                Text("Continue with Google", fontSize = 13.sp)
+                Text(
+                    "Continue with Google",
+                    fontSize = 13.sp
+                )
             }
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Don't have an account? ", fontSize = 12.sp, color = Color(0xFF888780))
-                TextButton(onClick = { onSignUp() }, contentPadding = PaddingValues(0.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+
+                Text(
+                    "Don't have an account? ",
+                    fontSize = 12.sp,
+                    color = Color(0xFF888780)
+                )
+
+                TextButton(
+                    onClick = onSignUp,
+                    contentPadding = PaddingValues(0.dp)
+                ) {
                     Text(
                         "Sign up",
                         fontSize = 12.sp,
@@ -208,23 +233,27 @@ fun LoginCard(
                 }
             }
         }
-    }
 
-
-    Box(
-        modifier = Modifier
-            .size(72.dp)
-        //    .align(Alignment.TopCenter)
-            .clip(CircleShape)
-            .background(Color(0xFF1D9E75))
-            .border(4.dp, Color.White, CircleShape),
-        contentAlignment = Alignment.Center
-    ) {
-        Icon(
-            imageVector = Icons.Filled.ShoppingCart,
-            contentDescription = "Logo",
-            tint = Color.White,
-            modifier = Modifier.size(34.dp)
-        )
+        // Logo (must be inside the Box)
+        Box(
+            modifier = Modifier
+                .size(72.dp)
+                .align(Alignment.TopCenter)
+                .clip(CircleShape)
+                .background(Color(0xFF1D9E75))
+                .border(
+                    width = 4.dp,
+                    color = Color.White,
+                    shape = CircleShape
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.ShoppingCart,
+                contentDescription = "Logo",
+                tint = Color.White,
+                modifier = Modifier.size(34.dp)
+            )
+        }
     }
 }
