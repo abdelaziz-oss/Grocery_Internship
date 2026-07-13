@@ -2,6 +2,7 @@ package com.example.groceryshop.authentication.ui.signup_screen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.groceryshop.authentication.data.core.ApiResult
 import com.example.groceryshop.authentication.domain.AuthRepository
 import com.example.groceryshop.authentication.domain.validation.EmailValidator
 import com.example.groceryshop.authentication.domain.validation.PasswordValidator
@@ -64,12 +65,20 @@ class SignUpViewModel @Inject constructor(
                 email = current.email,
                 password = current.password
             )
-            if (result.isSuccess) {
-                _events.emit(SignupEvents.OnSignUpSuccess)
-                // _signUpState.update { it.copy(isSuccess = true, isLoading = false) }
-            } else {
-                val message = result.exceptionOrNull()?.message ?: "Unknown Error"
-                _events.emit(SignupEvents.ApiError(message = message))
+            when(result){
+                is ApiResult.Success ->{
+                    _events.emit(SignupEvents.OnSignUpSuccess)
+                }
+                is ApiResult.Failure ->{
+                    _events.emit(SignupEvents.ApiError(result.exception?.message ?:"Unknown Error"))
+                }
+            }
+//            if (result.isSuccess) {
+//                _events.emit(SignupEvents.OnSignUpSuccess)
+//                // _signUpState.update { it.copy(isSuccess = true, isLoading = false) }
+//            } else {
+//                val message = result.exceptionOrNull()?.message ?: "Unknown Error"
+//                _events.emit(SignupEvents.ApiError(message = message))
 //                _signUpState.update {
 //                    it.copy(
 //                        isLoading = false,
@@ -97,7 +106,7 @@ class SignUpViewModel @Inject constructor(
 //        }
 //    }
 
-}
+
 
 sealed class SignupEvents {
     object OnSignUpSuccess : SignupEvents()
