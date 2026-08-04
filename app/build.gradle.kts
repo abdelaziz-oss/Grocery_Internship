@@ -58,6 +58,7 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
     ksp(libs.hilt.compiler)
 
     testImplementation(libs.junit)

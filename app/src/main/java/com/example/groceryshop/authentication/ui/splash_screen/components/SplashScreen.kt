@@ -1,6 +1,5 @@
-package com.example.groceryshop.authentication.ui.splash_screen
+package com.example.groceryshop.authentication.ui.splash_screen.components
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -13,15 +12,14 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,18 +28,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.groceryshop.authentication.ui.splash_screen.viewmodel.SplashViewModel
 
 @Composable
 fun SplashScreen(
-    onGetStarted: () -> Unit,
-    onLogin: () -> Unit
+    viewModel: SplashViewModel = hiltViewModel(),
+    onDecision: (String) -> Unit
 ) {
+    val destination by viewModel.startDestination.collectAsState()
+
+    LaunchedEffect(destination) {
+        destination?.let { onDecision(it) }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF0F6E56)),
         contentAlignment = Alignment.Center
     ) {
+        // Decorative background circles
         Box(
             modifier = Modifier
                 .size(300.dp)
@@ -99,39 +106,6 @@ fun SplashScreen(
                 color = Color.White.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center
             )
-
-            Spacer(modifier = Modifier.height(48.dp))
-
-            Button(
-                onClick = onGetStarted,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Color(0xFF0F6E56)
-                )
-            ) {
-                Text("Get Started", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            OutlinedButton(
-                onClick = onLogin,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(52.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = Color.White
-                ),
-                border = BorderStroke(1.5.dp, Color.White.copy(alpha = 0.5f))
-            ) {
-                Text("I already have an account", fontSize = 15.sp)
-            }
         }
     }
 }
