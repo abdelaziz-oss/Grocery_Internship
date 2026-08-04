@@ -2,6 +2,7 @@ package com.example.groceryshop.authentication.ui.login_screen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.groceryshop.authentication.data.core.ApiResult
 import com.example.groceryshop.authentication.domain.AuthRepository
 import com.example.groceryshop.authentication.domain.validation.EmailValidator
 import com.example.groceryshop.authentication.domain.validation.PasswordValidator
@@ -57,14 +58,23 @@ class LoginViewModel @Inject constructor(
             try {
                 val result = repository.login(current.email, current.password)
 
+                when (result) {
+                    is ApiResult.Success -> {
+                        _events.emit(LoginEvents.NavigationOnSuccess)
+                    }
 
-                if (result.isSuccess) {
-                    _events.emit(LoginEvents.NavigationOnSuccess)
-                    //    it.copy(isLoading = false, isLoginSuccess = true)
-                } else {
-                    val message = result.exceptionOrNull()?.message ?: " Unknown Error"
-                    _events.emit(LoginEvents.ApiError(message))
+                    is ApiResult.Failure -> {
+                        _events.emit(LoginEvents.ApiError(result.exception?.message ?: "Unknown Error"))
+
+                    }
                 }
+//                if (result is ApiResult.Success) {
+//                    _events.emit(LoginEvents.NavigationOnSuccess)
+//                    //    it.copy(isLoading = false, isLoginSuccess = true)
+//                } else {
+//                    val message = result.exceptionOrNull()?.message ?: " Unknown Error"
+//                    _events.emit(LoginEvents.ApiError(message))
+//                }
 
 //                    it.copy(
 //                        isLoading = false,
