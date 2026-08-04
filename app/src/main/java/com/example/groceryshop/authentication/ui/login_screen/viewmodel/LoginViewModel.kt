@@ -66,6 +66,13 @@ class LoginViewModel @Inject constructor(
                     val message = result.exceptionOrNull()?.message ?: " Unknown Error"
                     _events.emit(LoginEvents.ApiError(message))
                 }
+//                if (result is ApiResult.Success) {
+//                    _events.emit(LoginEvents.NavigationOnSuccess)
+//                    //    it.copy(isLoading = false, isLoginSuccess = true)
+//                } else {
+//                    val message = result.exceptionOrNull()?.message ?: " Unknown Error"
+//                    _events.emit(LoginEvents.ApiError(message))
+//                }
 
 //                    it.copy(
 //                        isLoading = false,
