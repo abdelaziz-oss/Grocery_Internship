@@ -23,5 +23,3 @@ class SplashViewModel @Inject constructor(private val userPreferences: UserPrefe
         }
     }
 }
-
-
